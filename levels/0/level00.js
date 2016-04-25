@@ -3,7 +3,8 @@
 
 var express = require('express'), // Web framework
     mu = require('mu2'),          // Mustache.js templating
-    sqlite3 = require('sqlite3'); // SQLite (database) driver
+    sqlite3 = require('sqlite3'), // SQLite (database) driver
+    bodyParser = require('body-parser');
 
 // Look for templates in the current directory
 mu.root = __dirname;
@@ -19,7 +20,7 @@ db.run(
 
 // Create the server
 var app = express();
-app.use(express.bodyParser());
+app.use(bodyParser.urlencoded({extended: false}));
 
 function renderPage(res, variables) {
   var stream = mu.compileAndRender('level00.html', variables);
@@ -28,8 +29,7 @@ function renderPage(res, variables) {
 }
 
 app.get('/*', function(req, res) {
-  var namespace = req.param('namespace');
-
+  var namespace = req.query['namespace'];
   if (namespace) {
     var query = 'SELECT * FROM secrets WHERE key LIKE ? || ".%"';
     db.all(query, namespace, function(err, secrets) {

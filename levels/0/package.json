@@ -12,7 +12,8 @@
   },
   "dependencies": {
     "express": "",
-    "sqlite3": "2.1.5",
+    "body-parser": "",
+    "sqlite3": "3.1.3",
     "mu2": ""
   },
   "devDependencies": {}
